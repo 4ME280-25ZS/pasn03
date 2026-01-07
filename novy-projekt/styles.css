@@ -1,0 +1,56 @@
+/* Minimal styles for wishlist app */
+body {
+  background: linear-gradient(180deg, #fffdfd, #fff1f6);
+  font-family: Inter, system-ui, Arial;
+  margin: 0
+}
+
+.wrap {
+  max-width: 880px;
+  margin: 2.5rem auto;
+  padding: 1.25rem
+}
+
+.small {
+  font-size: .9rem;
+  color: #6b7280
+}
+
+.btn {
+  background: #c0235a;
+  color: #fff;
+  padding: .45rem .7rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer
+}
+
+.btn.ghost {
+  background: #fff;
+  color: #c0235a;
+  border: 1px solid rgba(0, 0, 0, 0.06)
+}
+
+.card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04)
+}
+
+.items {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem
+}
+
+.meta {
+  font-size: .95rem;
+  color: #6b7280
+}
+
+.reservations {
+  margin-top: .75rem;
+  font-size: .9rem
+}

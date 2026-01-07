@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Wishlist — Nový projekt</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      :root {
+        --accent: #c0235a;
+        --muted: #6b7280;
+      }
+      body {
+        font-family: Inter, system-ui, Arial, Helvetica, sans-serif;
+        margin: 0;
+        background: #fffafc;
+        color: #111;
+      }
+      .wrap {
+        max-width: 880px;
+        margin: 2.5rem auto;
+        padding: 1.25rem;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      h1 {
+        margin: 0;
+        color: var(--accent);
+      }
+      .items {
+        margin-top: 1.25rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+      }
+      .card {
+        background: #fff;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+      }
+      .meta {
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+      .btn {
+        background: var(--accent);
+        color: #fff;
+        padding: 0.45rem 0.7rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+      }
+      .btn.ghost {
+        background: #fff;
+        color: var(--accent);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .reservations {
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+      }
+      .small {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+      .top-actions {
+        margin-left: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Wishlist — Nový projekt</h1>
+        <div class="top-actions">
+          <button id="seed" class="btn ghost">Přidat ukázkové položky</button>
+        </div>
+      </header>
+
+      <p class="small">
+        Tip: vyplň níže `SUPABASE_URL` a `SUPABASE_KEY` v souboru
+        <strong>config</strong> nebo v kódu níže (dočasně). Bez nich aplikace
+        nekomunikuje se Supabase.
+      </p>
+
+      <div id="status" class="small"></div>
+
+      <section class="items" id="items"></section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+    <script>
+      // KONFIGURACE: nahraďte hodnotami z vašeho Supabase projektu
+      const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+      const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+      const { createClient } = supabase;
+      const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      const statusEl = document.getElementById('status');
+      const itemsEl = document.getElementById('items');
+      const seedBtn = document.getElementById('seed');
+
+      async function loadItems() {
+        statusEl.textContent = 'Načítám položky…';
+        const { data: items, error } = await client
+          .from('items')
+          .select('*, reservations(id,name,qty,status)')
+          .order('id', { ascending: true });
+        if (error) {
+          statusEl.textContent = 'Chyba při načítání: ' + error.message;
+          return;
+        }
+        renderItems(items || []);
+        statusEl.textContent = '';
+      }
+
+      function renderItems(items) {
+        itemsEl.innerHTML = '';
+        if (items.length === 0) {
+          itemsEl.innerHTML =
+            '<div class="small">Žádné položky. Přidej ukázkové položky nebo vlož své do DB.</div>';
+          return;
+        }
+        items.forEach((item) => {
+          const reserved = (item.reservations || [])
+            .filter((r) => r.status === 'reserved')
+            .reduce((s, r) => s + r.qty, 0);
+          const avail = Math.max(0, (item.quantity || 1) - reserved);
+          const div = document.createElement('div');
+          div.className = 'card';
+          div.innerHTML = `
+          <strong>${escapeHtml(item.title)}</strong>
+          <div class="meta">Dostupné: ${avail} / ${item.quantity}</div>
+          <p>${escapeHtml(item.description || '')}</p>
+          <div style="margin-top:.65rem"><button class="btn" data-id="${
+            item.id
+          }">Chci koupit</button></div>
+          <div class="reservations"><strong>Rezervace:</strong>
+            <div>${
+              (item.reservations || [])
+                .filter((r) => r.status === 'reserved')
+                .map(
+                  (r) =>
+                    `<div>${escapeHtml(
+                      r.name,
+                    )} <button class=\"btn ghost\" data-cancel=\"${
+                      r.id
+                    }\">Zrušit</button></div>`,
+                )
+                .join('') || '<div class="small">žádné rezervace</div>'
+            }</div>
+          </div>
+        `;
+          itemsEl.appendChild(div);
+        });
+        // attach listeners
+        document
+          .querySelectorAll('.btn[data-id]')
+          .forEach((b) => b.addEventListener('click', onReserve));
+        document
+          .querySelectorAll('.btn[data-cancel]')
+          .forEach((b) => b.addEventListener('click', onCancel));
+      }
+
+      function escapeHtml(s) {
+        return String(s || '').replace(
+          /[&<>\"]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]),
+        );
+      }
+
+      async function onReserve(e) {
+        const id = Number(e.currentTarget.dataset.id);
+        const name = prompt('Zadej své jméno pro rezervaci:');
+        if (!name) return;
+        statusEl.textContent = 'Odesílám rezervaci…';
+        // simple availability check
+        const { data: availCheck } = await client
+          .from('items')
+          .select('id,quantity, reservations(id,qty,status)')
+          .eq('id', id)
+          .single();
+        const reserved = (availCheck.reservations || [])
+          .filter((r) => r.status === 'reserved')
+          .reduce((s, r) => s + r.qty, 0);
+        const available = (availCheck.quantity || 1) - reserved;
+        if (available <= 0) {
+          alert('Bohužel položka není dostupná.');
+          statusEl.textContent = '';
+          return;
+        }
+        const { error } = await client
+          .from('reservations')
+          .insert([
+            { item_id: id, name: name.trim(), qty: 1, status: 'reserved' },
+          ]);
+        if (error) {
+          alert('Chyba: ' + error.message);
+          statusEl.textContent = '';
+          return;
+        }
+        await loadItems();
+      }
+
+      async function onCancel(e) {
+        const rid = Number(e.currentTarget.dataset.cancel);
+        if (!confirm('Opravdu zrušit rezervaci?')) return;
+        statusEl.textContent = 'Ruším rezervaci…';
+        const { error } = await client
+          .from('reservations')
+          .update({ status: 'cancelled' })
+          .eq('id', rid);
+        if (error) {
+          alert('Chyba: ' + error.message);
+          statusEl.textContent = '';
+          return;
+        }
+        await loadItems();
+      }
+
+      seedBtn.addEventListener('click', async () => {
+        const seed = [
+          {
+            title: 'Kniha o designu',
+            description: 'Inspirativní kniha',
+            quantity: 1,
+          },
+          {
+            title: 'Kamera',
+            description: 'Malá digitální kamera',
+            quantity: 1,
+          },
+          { title: 'Kabely USB-C', description: 'Sada 3ks', quantity: 3 },
+        ];
+        for (const it of seed) {
+          await client.from('items').insert(it);
+        }
+        loadItems();
+      });
+
+      // realtime updates
+      try {
+        client
+          .channel('public:reservations')
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'reservations' },
+            () => loadItems(),
+          )
+          .subscribe();
+      } catch (e) {
+        /* ignore if not supported */
+      }
+
+      // initial load
+      loadItems();
+    </script>
+  </body>
+</html>
