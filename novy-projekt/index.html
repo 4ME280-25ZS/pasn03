@@ -21,17 +21,6 @@
         margin: 2.5rem auto;
         padding: 1.25rem;
       }
-      header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-      h1 {
-        margin: 0;
-        color: var(--accent);
-      }
-      .items {
-        margin-top: 1.25rem;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 1rem;
@@ -75,17 +64,18 @@
   <body>
     <div class="wrap">
       <header>
-        <h1>Wishlist — Nový projekt</h1>
+        <h1 style="display: flex; align-items: center; gap: 0.7em">
+          <span style="font-size: 2.1em; line-height: 1">🎂</span>
+          Můj narozeninový wishlist
+        </h1>
         <div class="top-actions">
-          <button id="seed" class="btn ghost">Přidat ukázkové položky</button>
+          <button id="seed" class="btn ghost" disabled>
+            Klikni na tlačítko „Chci koupit“ a zadej své jméno — položka se tím
+            rezervuje a tvoje jméno se zobrazí v seznamu rezervací. Pokud chceš
+            rezervaci zrušit, použij u dané rezervace tlačítko „Zrušit“.
+          </button>
         </div>
       </header>
-
-      <p class="small">
-        Tip: vyplň níže `SUPABASE_URL` a `SUPABASE_KEY` (anon) v kódu.
-        Neposkytuj a nikdy nezveřejňuj `service_role` (privátní) klíče — pokud
-        jsi ho omylem vložil sem, okamžitě ho zruš a vytvoř nový.
-      </p>
 
       <div id="status" class="small"></div>
 
