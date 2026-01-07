@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Novák;Jan;;;
+FN:Jan Novák
+ORG:Freelance
+TITLE:Webový designér & Front-end developer
+TEL;TYPE=CELL:+420123456789
+EMAIL:jan.novak@example.com
+ADR:;;Vinohradská 123;Praha;;12000;Czech Republic
+END:VCARD

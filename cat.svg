@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <style> .s0{fill:#FFD6E0} .s1{fill:#fff} .s2{fill:#333} .s3{fill:#FF9BB3} </style>
+  </defs>
+  <rect width="200" height="200" rx="20" fill="none"/>
+  <!-- ears -->
+  <path class="s0" d="M45 40 C30 20, 60 10, 70 36 Z"/>
+  <path class="s0" d="M155 40 C170 20, 140 10, 130 36 Z"/>
+  <!-- face -->
+  <circle cx="100" cy="100" r="58" class="s0"/>
+  <!-- muzzle -->
+  <ellipse cx="100" cy="118" rx="34" ry="22" class="s1"/>
+  <!-- eyes -->
+  <circle cx="82" cy="96" r="7" class="s2"/>
+  <circle cx="118" cy="96" r="7" class="s2"/>
+  <!-- nose -->
+  <path class="s3" d="M98 110 q2 6 6 0 q-4 -6 -6 0"/>
+  <!-- whiskers -->
+  <path d="M60 110 h-22" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+  <path d="M60 118 h-18" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+  <path d="M140 110 h22" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+  <path d="M140 118 h18" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+</svg>
