@@ -1,0 +1,22 @@
+-- Seed data for wishlist items (20 demo rows)
+INSERT INTO items (title, description, quantity) VALUES
+('Kniha o designu', 'Inspirativní kniha', 1),
+('Kamera', 'Malá digitální kamera', 1),
+('Kabely USB-C', 'Sada 3ks', 3),
+('Sluchátka', 'Bezdrátová sluchátka', 1),
+('Powerbanka 10000mAh', 'Přenosná powerbanka', 2),
+('Bluetooth reproduktor', 'Malý hlasitý reproduktor', 1),
+('Stojan na telefon', 'Nastavitelný stolní stojan', 1),
+('Moleskine zápisník', 'Kapesní zápisník', 2),
+('Stylus pero', 'Dotykové pero pro tablet', 1),
+('USB-C hub', 'Rozbočovač portů', 1),
+('Přenosný disk 1TB', 'Externí HDD/SSD', 1),
+('MicroSD 128GB', 'Paměťová karta', 2),
+('Tričko', 'Bavlněné tričko velikost M', 1),
+('Hrnek s potiskem', 'Keramický hrnek', 1),
+('Mini nářadí', 'Sada mini nářadí', 1),
+('LED lampa', 'Stolní LED lampa', 1),
+('Dárkový poukaz', 'Poukaz na nákup', 1),
+('Herní myš', 'Ergonomická myš', 1),
+('Mechanická klávesnice', 'Tiché spínače', 1),
+('Kniha receptů', 'Recepty na rychlá jídla', 1);

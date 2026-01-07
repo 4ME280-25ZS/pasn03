@@ -82,9 +82,9 @@
       </header>
 
       <p class="small">
-        Tip: vyplň níže `SUPABASE_URL` a `SUPABASE_KEY` v souboru
-        <strong>config</strong> nebo v kódu níže (dočasně). Bez nich aplikace
-        nekomunikuje se Supabase.
+        Tip: vyplň níže `SUPABASE_URL` a `SUPABASE_KEY` (anon) v kódu.
+        Neposkytuj a nikdy nezveřejňuj `service_role` (privátní) klíče — pokud
+        jsi ho omylem vložil sem, okamžitě ho zruš a vytvoř nový.
       </p>
 
       <div id="status" class="small"></div>
@@ -95,8 +95,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
     <script>
       // KONFIGURACE: nahraďte hodnotami z vašeho Supabase projektu
-      const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-      const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+      // Note: do NOT paste any service_role (secret) key here. Use the ANON public key.
+      const SUPABASE_URL = 'https://uddiuupxfyxmzkmdpauj.supabase.co';
+      const SUPABASE_KEY = 'sb_publishable_VboYpoO_EW0InxTL6pRSiA_lxHLVW-p';
 
       const { createClient } = supabase;
       const client = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -236,6 +237,79 @@
             quantity: 1,
           },
           { title: 'Kabely USB-C', description: 'Sada 3ks', quantity: 3 },
+          {
+            title: 'Sluchátka',
+            description: 'Bezdrátová sluchátka',
+            quantity: 1,
+          },
+          {
+            title: 'Powerbanka 10000mAh',
+            description: 'Přenosná powerbanka',
+            quantity: 2,
+          },
+          {
+            title: 'Bluetooth reproduktor',
+            description: 'Malý hlasitý reproduktor',
+            quantity: 1,
+          },
+          {
+            title: 'Stojan na telefon',
+            description: 'Nastavitelný stolní stojan',
+            quantity: 1,
+          },
+          {
+            title: 'Moleskine zápisník',
+            description: 'Kapesní zápisník',
+            quantity: 2,
+          },
+          {
+            title: 'Stylus pero',
+            description: 'Dotykové pero pro tablet',
+            quantity: 1,
+          },
+          { title: 'USB-C hub', description: 'Rozbočovač portů', quantity: 1 },
+          {
+            title: 'Přenosný disk 1TB',
+            description: 'Externí HDD/SSD',
+            quantity: 1,
+          },
+          {
+            title: 'MicroSD 128GB',
+            description: 'Paměťová karta',
+            quantity: 2,
+          },
+          {
+            title: 'Tričko',
+            description: 'Bavlněné tričko velikost M',
+            quantity: 1,
+          },
+          {
+            title: 'Hrnek s potiskem',
+            description: 'Keramický hrnek',
+            quantity: 1,
+          },
+          {
+            title: 'Mini nářadí',
+            description: 'Sada mini nářadí',
+            quantity: 1,
+          },
+          { title: 'LED lampa', description: 'Stolní LED lampa', quantity: 1 },
+          {
+            title: 'Dárkový poukaz',
+            description: 'Poukaz na nákup',
+            quantity: 1,
+          },
+          { title: 'Herní myš', description: 'Ergonomická myš', quantity: 1 },
+          {
+            title: 'Mechanická klávesnice',
+            description: 'Tiché spínače',
+            quantity: 1,
+          },
+          {
+            title: 'Kniha receptů',
+            description: 'Recepty na rychlá jídla',
+            quantity: 1,
+          },
         ];
         for (const it of seed) {
           await client.from('items').insert(it);
